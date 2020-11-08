@@ -5,7 +5,7 @@ title: Skeet
 author: Sara Gong
 description: >
   A minimalist template for designing a personal GitHub Pages website - without typing a single line of code.
-baseurl: "https://soomr.github.io/adamsoomro/"
+baseurl: "https://soomr.github.io/adamsoomro"
 
 plugins:
   - jekyll-feed
