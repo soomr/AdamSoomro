@@ -2,8 +2,6 @@
 
 My name is Adam Soomro. I'm a student and Hobby Developer
 
-Syntax highlighted code block
-
 # Header 1
 ## Header 2
 ### Header 3
