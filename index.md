@@ -1,28 +1,77 @@
-## Welcome to My page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Accelerometer Demo</title>
 
-My name is Adam Soomro. I'm a student and Hobby Developer
+    <style>
+    .indicatorDot{
+        width: 30px;
+        height: 30px;
+        background-color: #ffab56;
+        border-radius: 50%;
+        position:fixed;
+    }
+    </style>
 
-# Header 1
-## Header 2
-### Header 3
+<script>    
+    var px = 50; // Position x and y
+    var py = 50;
+    var vx = 0.0; // Velocity x and y
+    var vy = 0.0;
+    var updateRate = 1/60; // Sensor refresh rate
 
-- Bulleted
-- List
+    function getAccel(){
+        DeviceMotionEvent.requestPermission().then(response => {
+            if (response == 'granted') {
+        // Add a listener to get smartphone orientation 
+            // in the alpha-beta-gamma axes (units in degrees)
+                window.addEventListener('deviceorientation',(event) => {
+                    // Expose each orientation angle in a more readable way
+                    rotation_degrees = event.alpha;
+                    frontToBack_degrees = event.beta;
+                    leftToRight_degrees = event.gamma;
+                    
+                    // Update velocity according to how tilted the phone is
+                    // Since phones are narrower than they are long, double the increase to the x velocity
+                    vx = vx + leftToRight_degrees * updateRate*2; 
+                    vy = vy + frontToBack_degrees * updateRate;
+                    
+                    // Update position and clip it to bounds
+                    px = px + vx*.5;
+                    if (px > 98 || px < 0){ 
+                        px = Math.max(0, Math.min(98, px)) // Clip px between 0-98
+                        vx = 0;
+                    }
 
-1. Numbered
-2. List
+                    py = py + vy*.5;
+                    if (py > 98 || py < 0){
+                        py = Math.max(0, Math.min(98, py)) // Clip py between 0-98
+                        vy = 0;
+                    }
+                    
+                    dot = document.getElementsByClassName("indicatorDot")[0]
+                    dot.setAttribute('style', "left:" + (px) + "%;" +
+                                                "top:" + (py) + "%;");
+                    
+                });
+            }
+        });
+    }
+    </script>
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+</head>
+<body style="background-color:lightblue;">
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+<div id="main">
+    <button id="accelPermsButton" onclick="getAccel()" style="height:50px;">Get Accelerometer Permissions</button>
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/soomr/adamsoomro/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+    <div class="indicatorDot" style="left:30%; top:30%;"></div>
+</div>
 
-### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+</body>
+</html>
